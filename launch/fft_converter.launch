@@ -1,0 +1,11 @@
+<launch>
+    <arg name="fft_topic" />
+    <arg name="configuration_topic" />
+    <arg name="sensor_frame" />
+
+    <node pkg="nodelet" type="nodelet" name="fft_converter_nodelet" args="load LWLRF/FFTConverterNodelet lwlrf_manager" output="screen">
+        <param name="fft_topic" value="$(arg fft_topic)"/>
+        <param name="configuration_topic" value="$(arg configuration_topic)"/>
+        <param name="sensor_frame" value="$(arg sensor_frame)"/>
+    </node>
+</launch>

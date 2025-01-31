@@ -1,0 +1,17 @@
+<launch>
+    <arg name="input_topic"/>
+    <arg name="output_topic" default="compensated_cloud"/>
+    <arg name="target_frame_id"/>
+    <arg name="expected_input_frequency"/>
+    <arg name="output_queue_size" default="1"/>
+    <arg name="tf_lookup_timeout" default="0.01"/>
+
+    <node pkg="nodelet" type="nodelet" name="motion_compensation_nodelet" args="load LWLRF/MotionCompensationNodelet lwlrf_manager" output="screen">
+        <param name="input_topic" value="$(arg input_topic)"/>
+        <param name="output_topic" value="$(arg output_topic)"/>
+        <param name="target_frame_id" value="$(arg target_frame_id)"/>
+        <param name="expected_input_frequency" value="$(arg expected_input_frequency)"/>
+        <param name="output_queue_size" value="$(arg output_queue_size)"/>
+        <param name="tf_lookup_timeout" value="$(arg tf_lookup_timeout)"/>
+    </node>
+</launch>

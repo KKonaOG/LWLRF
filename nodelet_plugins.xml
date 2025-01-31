@@ -1,0 +1,13 @@
+<library path="lib/liblwlrf">
+    <class name="LWLRF/FFTConverterNodelet" type="LWLRF::FFTConverterNodelet" base_class_type="nodelet::Nodelet">
+        <description>This nodelet handles converting raw navtech RAS3/RAS6 messages to PCL2 messages</description>
+    </class>
+
+    <class name="LWLRF/CloudFilterNodelet" type="LWLRF::CloudFilterNodelet" base_class_type="nodelet::Nodelet">
+        <description>This nodelet handles filtering the output from a LWLRF-compatible FFTConverter</description>
+    </class>
+
+    <class name="LWLRF/MotionCompensationNodelet" type="LWLRF::MotionCompensationNodelet" base_class_type="nodelet::Nodelet">
+        <description>This nodelet handles accoutning for vehicle motion on a per-scan level</description>
+    </class>
+</library>

@@ -1,0 +1,29 @@
+{
+    "name": "ROS Noetic",
+    "image": "osrf/ros:noetic-desktop-full",
+    "updateRemoteUserUID": true,
+    "postCreateCommand": "apt update && apt install -y clangd && echo 'source /opt/ros/noetic/setup.sh' >> ~/.bashrc",
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-iot.vscode-ros",
+                "llvm-vs-code-extensions.vscode-clangd"
+            ],
+            "settings": {
+                "clangd.enable": true,
+                "clangd.arguments": [
+                    "--compile-commands-dir=${workspaceFolder}/build",
+                    "--completion-style=detailed",
+                    "--clang-tidy",
+                    "--clang-tidy-checks=-*,modernize*",
+                    "--header-insertion=never"
+                ],
+                "C_Cpp.intelliSenseEngine": "disabled"
+            }
+        }
+    }
+}

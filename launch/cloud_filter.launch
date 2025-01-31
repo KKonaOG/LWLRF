@@ -1,0 +1,13 @@
+<launch>
+    <arg name="input_pcl_topic"/>
+    <arg name="cfar_guard_cells"/>
+    <arg name="cfar_train_cells"/>
+    <arg name="configuration_topic"/>
+
+    <node pkg="nodelet" type="nodelet" name="cloud_filter_nodelet" args="load LWLRF/CloudFilterNodelet lwlrf_manager" output="screen">
+        <param name="input_pcl_topic" value="$(arg input_pcl_topic)"/>
+        <param name="configuration_topic" value="$(arg configuration_topic)"/>
+        <param name="cfar_guard_cells" value="$(arg cfar_guard_cells)"/>
+        <param name="cfar_train_cells" value="$(arg cfar_train_cells)"/>
+    </node>
+</launch>

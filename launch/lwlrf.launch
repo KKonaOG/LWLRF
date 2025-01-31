@@ -1,0 +1,53 @@
+<launch>
+    <arg name="bag_playback" default="true"/>
+
+    <!-- FFT Converter Parameters -->
+    <arg name="fft_topic" default="Navtech/FFTData"/>
+    <arg name="configuration_topic" default="Navtech/Configuration_Topic"/>
+    <arg name="sensor_frame" default="lester/navtech"/>
+
+    <!-- Motion Compensation Parameters -->
+    <arg name="azimuth_topic" default="fft_converter_nodelet/raw_azimuth"/>
+    
+    <!-- Cloud Filtering Parameters -->
+    <arg name="input_pcl_topic" default="fft_converter_nodelet/raw_scan"/>
+    <arg name="cfar_guard_cells" default="10"/>
+    <arg name="cfar_train_cells" default="80"/>
+
+    <!-- Transform Parameters -->
+    <arg name="radar_transform_x" default="-0.85"/>
+    <arg name="radar_transform_y" default="0.275"/>
+    <arg name="radar_transform_z" default="0.0"/>
+    <arg name="radar_transform_roll" default="3.14"/>
+    <arg name="radar_transform_pitch" default="0.0"/>
+    <arg name="radar_transform_yaw" default="-0.0225"/>
+    <arg name="radar_transform_parent" default="lester/sensor_plate_link"/>
+    <arg name="radar_transform_publish_rate" default="0.3125"/>
+
+    <group if="$(arg bag_playback)">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="radar_tf_broadcaster" args="$(arg radar_transform_x) $(arg radar_transform_y) $(arg radar_transform_z) $(arg radar_transform_yaw) $(arg radar_transform_pitch) $(arg radar_transform_roll) $(arg radar_transform_parent) $(arg sensor_frame)" />
+    </group>
+
+    <node pkg="nodelet" type="nodelet" name="lwlrf_manager" args="manager" output="screen"/>
+
+    <include file="$(find lwlrf)/launch/fft_converter.launch">
+        <arg name="fft_topic" value="$(arg fft_topic)"/>
+        <arg name="configuration_topic" value="$(arg configuration_topic)"/>
+        <arg name="sensor_frame" value="$(arg sensor_frame)"/>
+    </include>
+
+    <include file="$(find lwlrf)/launch/cloud_filter.launch">
+        <arg name="input_pcl_topic" value="$(arg input_pcl_topic)"/>
+        <arg name="configuration_topic" value="$(arg configuration_topic)"/>
+        <arg name="cfar_guard_cells" value="$(arg cfar_guard_cells)"/>
+        <arg name="cfar_train_cells" value="$(arg cfar_train_cells)"/>
+    </include>
+
+    <include file="$(find lwlrf)/launch/motion_compensation.launch">
+            <arg name="input_topic" value="/cloud_filter_nodelet/filtered_points"/>
+            <arg name="target_frame_id" value="lester/odom"/>
+            <arg name="expected_input_frequency" value="4.0"/>
+            <arg name="output_queue_size" value="100"/>
+            <arg name="tf_lookup_timeout" value="0.100"/>
+    </include>
+</launch>
